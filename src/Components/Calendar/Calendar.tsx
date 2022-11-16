@@ -33,7 +33,6 @@ function CalendarElement(){
     }, } ) , [ ] );
 
     const [events, setEvents] = useState<Event[]> ([]);
-    const [auxiliar, setAuxiliar] = useState([...events]);
 
     async function getEventsRegister(){
         const register = await eventsApi.getEvents()
@@ -44,34 +43,30 @@ function CalendarElement(){
 
     useEffect(() => {
         getEventsRegister()
-    }, [auxiliar])
+    }, [])
+    console.log(events)
 
     // quando clica em alguma data
     const handleSelectSlot = useCallback(
-      ({
-        start,
-        end, 
-        slots,
-        action
-      } : {
-        start: Date;
-        end: Date;
-        slots: Date[] | string[];
-        action: 'select' | 'click' | 'doubleClick';
-      }) => {
+      ({start, end } : { start: Date; end: Date; }) => {
             const title = window.prompt('New Event name')
             if (title) {
                 eventsApi.createEvents({title, start, end})
-                setAuxiliar([...auxiliar, { start , end, title }])
-        }}, [setAuxiliar])
+                setEvents((prev) => [...prev, { start , end, title }])
+        }}, [setEvents])
     
-
+    // quando clica em algum evento
+    const handleSelectEvent = useCallback(
+    (event: any) => {window.alert(event.title)}
+    , [] )
+        
     
     return (
         <ContainerCalendar>
                 <Calendar 
                     onSelectSlot={handleSelectSlot} 
                     defaultDate = { defaultDate } 
+                    onSelectEvent = {handleSelectEvent}
                     localizer = {localizer}
                     style = {{ height: '80vh' }}
                     selectable

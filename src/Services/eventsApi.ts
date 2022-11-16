@@ -21,7 +21,7 @@ export async function createEvents(event: Event){
     }
 };
 
-export async function deleteEvents(event: Event){
-    const response = await api.delete(`/events`)
+export async function deleteEvents(id: number){
+    const response = await api.delete(`/events/${id}`)
     return response;
 };
